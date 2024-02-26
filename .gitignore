@@ -1,0 +1,12 @@
+.idea
+__pycache__/*
+*.pyc
+test.py
+venv
+utils/img
+*.zip
+video/*
+img/*
+*.txt
+*.xml
+*.exe
