@@ -1,9 +1,9 @@
 import math
-
 import requests
 
+
 headers = {
-    "Token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJU0VWRU4xMDEiLCJleHAiOjE3MDkwMjE2NzcsInVpZCI6NTk5ODMsImVudkdhbWUiOjEsIm5hbWUiOiJHRUtJU0VWRU4xMDEiLCJuaWNrbmFtZSI6IkdFS0lTRVZFTjEwMSIsInBsZklkIjoyMiwidHlwIjoiYW1pZ28tYXBwLXR5cGUiLCJjdXJyZW5jeSI6IkpQWSIsInJpZCI6MjA2LCJhdXMiOlsiUk9MRV9BVVRIRUQiLCJST0xFX0dBTUVfUExBWUVSIl19.4nfJ02jIFzKjmsNjRxa4_U6LV3akCgcbJNAgSyX5K-Y"
+    "Token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJU0VWRU4xMDEiLCJleHAiOjE3MDkzNjczNjIsInVpZCI6NTk5ODMsImVudkdhbWUiOjEsIm5hbWUiOiJHRUtJU0VWRU4xMDEiLCJuaWNrbmFtZSI6IkdFS0lTRVZFTjEwMSIsInBsZklkIjoyMiwidHlwIjoiYW1pZ28tYXBwLXR5cGUiLCJjdXJyZW5jeSI6IkpQWSIsInJpZCI6MjA2LCJhdXMiOlsiUk9MRV9BVVRIRUQiLCJST0xFX0dBTUVfUExBWUVSIl19.zw-s-hWsYS4pp4NCM852g5Ug7PM5_qxZu3g7h_31cjo"
 }
 
 
@@ -51,16 +51,16 @@ def get_game_detail(game_id):
     return result_list
 
 
-def get_game_list(page_number):
+def get_game_list(page_number, pageSize, key):
     """
     获取游戏机列表数据
     :return:
     """
-    is_continue = True
     request_url = "https://api.dasheng66.com/game/searchMenuGames"
     format_data = {
+        "key": key,
         "curPage": page_number,
-        "pageSize": 50,
+        "pageSize": pageSize,
         "name": ""
     }
     response = requests.get(request_url, params=format_data, headers=headers)
@@ -71,12 +71,9 @@ def get_game_list(page_number):
         json_data = None
         print('token 过期')
     if json_data:
+        game_info_list = []
         game_list = json_data.get('items')
-        page = json_data.get('page')
-        page_num = math.ceil(int(page.get('total'))/int(page.get('pageSize')))
-        cur_page = page.get('curPage')
-        if cur_page > page_num:
-            is_continue = False
+        page_info = json_data.get('page')
         for game in game_list:
             result = {
                 'gameId': game['gameId'],  # 游戏ID
@@ -89,10 +86,44 @@ def get_game_list(page_number):
                 'odds': int(game.get('odds', 0))*10,  # 每枚
                 'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
             }
-            print(result)
-    if is_continue:
-        page_number += 1
-        get_game_list(page_number)
+            game_info_list.append(result)
+        result_info = {"page": page_info, "rows": game_info_list}
+    else:
+        result_info = None
+    return result_info
+
+
+def get_playing_list():
+    """
+    获取正在玩的机器列表
+    :return:
+    """
+    request_url = "https://api.dasheng66.com/game/searchPlay"
+    response = requests.get(request_url, headers=headers)
+    try:
+        result = response.json()
+    except Exception as e:
+        print(e)
+        print('token 过期')
+        result = None
+    return result
+
+
+def push_stop_machine(machine_id):
+    """
+    停止正在玩的机器
+    :param machine_id:
+    :return:
+    """
+    request_url = "https://api.dasheng66.com/game/remove/{}".format(machine_id)
+    response = requests.post(request_url, headers=headers)
+    try:
+        result = response.json()
+    except Exception as e:
+        print(e)
+        print('token 过期')
+        result = None
+    return result
 
 
 if __name__ == '__main__':

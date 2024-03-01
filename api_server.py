@@ -1,9 +1,11 @@
+import db
 import time
 import pymongo
 import numpy as np
 from tools import *
 from flask_cors import CORS
 from config import *
+from get_data import *
 from functools import wraps
 from flask import Flask, jsonify, request, g
 
@@ -71,55 +73,110 @@ def get_token():
     return jsonify(result)
 
 
-@app.route('/site/search', methods=['POST'])
-def search_site():
+@app.route('/api/getMenuTypes', methods=['GET'])
+def getMenuTypes():
     """
-    数据源主体相似搜索接口
+    获取游戏菜单类型
     :return:
     """
-    message = 'success'
-    data = request.json
-    input_text = data.get('input')
-    format_text = format_input(input_text)
-    emb = m3e.encode(format_text)
-    embeddings = np.array(emb, dtype=np.float32).tobytes()
-    results = redis_search.knn_search(5, embeddings)
-    format_res_list = []
-    for result in results:
-        score = float(result.score)*1000
-        if score < 200:
-            format_res = {"id": result.site_id, "name": result.name, "status": result.status, "score": score}
-            format_res_list.append(format_res)
     response = {
-        "data": format_res_list,
-        "message": message
+        "data": ['Hot','New', 'slot_N0.4_false', 'slot_N0.5_false', 'slot_N0.6_false', 'slot_TAIWANver_false',
+                 'slot_true', 'cr_Pachinko_CLOSE_', 'cr_Pachinko_MAX_', 'cr_Pachinko_MID_', 'cr_Pachinko_LM_',
+                 'cr_Pachinko_L_', 'oneslot,onepachinko'],
+        "message": 'success'
     }
     return jsonify(response)
 
 
-@app.route('/site/info', methods=['GET'])
-def get_site_info():
+@app.route('/api/searchMenuGames', methods=['GET'])
+def searchMenuGames():
     """
-    数据源主体详情获取接口
+    查询菜单游戏列表
+    key_type: Hot,New,slot_N0.4_false,slot_N0.5_false,slot_N0.6_false,slot_TAIWANver_false,slot_true,cr_Pachinko_CLOSE_
+    cr_Pachinko_MAX_,cr_Pachinko_MID_,cr_Pachinko_LM_,cr_Pachinko_L_,oneslot,onepachinko
     :return:
     """
     result = {}
     message = 'success'
     data = request.args
-    if len(data) >= 2:
-        message = 'params only input one'
-    else:
-        site_id = int(data.get('site_id', 0))
-        code = str(data.get('code', ''))
-        mongo = pymongo.MongoClient(MONGO_HOST, 27017)[MONGODB_NAME][MONGODB_SET_NAME]
-        if site_id:
-            result = mongo.find_one({'site_id': site_id})
-        elif code:
-            result = mongo.find_one({'unicode': code})
-        else:
-            message = 'please check params'
-        if result:
-            result.pop('_id')
+    key = str(data.get('key', ''))
+    curPage = int(data.get('curPage', 1))
+    pageSize = int(data.get('pageSize', 20))
+    if not data:
+        message = 'key is a necessary parameter'
+    try:
+        result = get_game_list(curPage, pageSize, key)
+    except Exception as e:
+        print(e)
+        message = str(e)
+    response = {
+        "data": result,
+        "message": message
+    }
+    return jsonify(response)
+
+
+@app.route('/api/searchMachines', methods=['GET'])
+def searchMachines():
+    """
+    查询机器列表详情
+    :return:
+    """
+    result = []
+    message = 'success'
+    data = request.args
+    game_id = int(data.get('game_id', 0))
+    if not game_id:
+        message = 'game_id is a necessary parameter'
+    try:
+        result = get_game_detail(game_id)
+    except Exception as e:
+        print(e)
+        message = str(e)
+    response = {
+        "data": result,
+        "message": message
+    }
+    return jsonify(response)
+
+
+@app.route('/api/searchPlay', methods=['GET'])
+def searchPlay():
+    """
+    查询正在玩的机器列表
+    :return:
+    """
+    result = []
+    message = 'success'
+    try:
+        result = get_playing_list()
+    except Exception as e:
+        print(e)
+        message = str(e)
+    response = {
+        "data": result,
+        "message": message
+    }
+    return jsonify(response)
+
+
+@app.route('/api/removeMachine', methods=['POST'])
+def removeMachine():
+    """
+    查询正在玩的机器列表
+    :return:
+    """
+    result = ''
+    message = 'success'
+    data = request.json
+    machine_id = int(data.get('machine_id', 0))
+    if not machine_id:
+        message = 'machine_id is a necessary parameter'
+    try:
+        result = push_stop_machine(machine_id)
+    except Exception as e:
+        print(e)
+        message = str(e)
     response = {
         "data": result,
         "message": message
