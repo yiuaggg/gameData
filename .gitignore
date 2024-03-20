@@ -1,12 +1,11 @@
 .idea
-__pycache__/*
+__pycache__
 *.pyc
 test.py
-venv
+.venv
 utils/img
 *.zip
-video/*
-img/*
-*.txt
-*.xml
+site.txt
 *.exe
+*.jpg
+*.vscode
