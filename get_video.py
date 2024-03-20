@@ -67,14 +67,13 @@ def get_video_list():
             video_id = video_html_url.split('/')[-1]
             video_url = get_video_url(video_html_url)
             if video_url:
-                video_type = 1
                 category = category_list[index]
-                if 'パチンコ' in category:
-                    category = 'パチンコ'
-                    video_type = 1
-                elif 'パチスロ' in category:
+                if category == 'パチスロ・パチンコ' or category == 'パチスロ':
                     category = 'パチスロ'
                     video_type = 2
+                if category == 'パチンコ':
+                    category = 'パチンコ'
+                    video_type = 1
                 video_info = {
                     "thumb": thumb_url_list[index], "title": title_list[index], "category": category,
                     "summary": summary_list[index], "publish_time": publish_time_list[index], "url": video_html_url,
