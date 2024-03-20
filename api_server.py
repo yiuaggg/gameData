@@ -1,3 +1,5 @@
+import json
+
 import db
 import time
 import pymongo
@@ -174,6 +176,36 @@ def removeMachine():
         message = 'machine_id is a necessary parameter'
     try:
         result = push_stop_machine(machine_id)
+    except Exception as e:
+        print(e)
+        message = str(e)
+    response = {
+        "data": result,
+        "message": message
+    }
+    return jsonify(response)
+
+
+@app.route('/api/getVideo', methods=['GET'])
+def getVideo():
+    """
+    获取游戏视频列表
+    video_type: 1,弹珠机；2,老虎机
+    :return:
+    """
+    result = ''
+    message = 'success'
+    data = request.args
+    video_type = int(data.get('video_type', 1))
+    if not video_type:
+        message = 'video_type is a necessary parameter'
+    try:
+        if video_type == 1:
+            d_video_list = db.Redis(0).get_list('danZhuJi')
+            result = json.loads(db.Redis(0).get_values(d_video_list))
+        if video_type == 2:
+            l_video_list = db.Redis(0).get_list('LaoHuJi')
+            result = json.loads(db.Redis(0).get_values(l_video_list))
     except Exception as e:
         print(e)
         message = str(e)

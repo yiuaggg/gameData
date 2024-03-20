@@ -1,9 +1,12 @@
+import json
 import time
 import requests
 from lxml import etree
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+
+import db
 
 headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -45,7 +48,7 @@ def get_video_url(video_url):
 
 def get_video_list():
     request_url = "https://www.pachitele.com/contents/search?page={}"
-    for page in range(1, 3):
+    for page in range(1, 4):
         request_url = request_url.format(page)
         html_response = requests.get(request_url, headers=headers)
         response = etree.HTML(html_response.text)
@@ -57,14 +60,28 @@ def get_video_list():
         publish_time_list = response.xpath('//div[@class="update"]/text()')
         index = 0
         for video_html_url in video_html_url_list:
+            video_id = video_html_url.split('/')[-1]
             video_url = get_video_url(video_html_url)
             if video_url:
+                video_type = 1
+                category = category_list[index]
+                if 'パチンコ' in category:
+                    category = 'パチンコ'
+                    video_type = 1
+                elif 'パチスロ' in category:
+                    category = 'パチスロ'
+                    video_type = 2
                 video_info = {
-                    "thumb": thumb_url_list[index], "title": title_list[index], "category": category_list[index],
+                    "thumb": thumb_url_list[index], "title": title_list[index], "category": category,
                     "summary": summary_list[index], "publish_time": publish_time_list[index], "url": video_html_url,
-                    "video_url": video_url
+                    "video_url": video_url, "video_type": video_type
                 }
                 print(video_info)
+                if video_type == 1:
+                    db.Redis(0).insert_list('danZhuJi', video_id)
+                if video_type == 2:
+                    db.Redis(0).insert_list('laoHuJi', video_id)
+                db.Redis(0).insert_data(video_id, json.dumps(video_info))
             index += 1
 
 

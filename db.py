@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+
 import redis
 from config import *
 
@@ -17,6 +19,15 @@ class Redis(object):
         """
         value = self.redis_obj.get(key)
         return value
+
+    def get_values(self, keys):
+        """
+        获取多个键
+        :param keys:
+        :return:
+        """
+        values = self.redis_obj.mget(keys)
+        return json.loads(values)
     
     def insert_data(self, key, value, ex=None):
         """
