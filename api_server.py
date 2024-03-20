@@ -206,7 +206,7 @@ def getVideo():
             d_video_list = db.Redis(0).get_list('danZhuJi')
             result = db.Redis(0).get_values(d_video_list)
         if video_type == 2:
-            l_video_list = db.Redis(0).get_list('LaoHuJi')
+            l_video_list = db.Redis(0).get_list('laoHuJi')
             result = db.Redis(0).get_values(l_video_list)
     except Exception as e:
         print(e)
