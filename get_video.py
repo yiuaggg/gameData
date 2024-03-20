@@ -20,9 +20,9 @@ def get_video_url(video_url):
     """
     username = 'wmcool1314@gmail.com'
     password = 'wmcool1314'
-    driver_path = r'./chromedriver.exe'
+    driver_path = r'./chromedriver'
     option = webdriver.ChromeOptions()
-    # option.add_argument('--headless')  # 无头浏览器
+    option.add_argument('--headless')  # 无头浏览器
     option.add_argument('--disable-gpu')  # 不需要GPU加速
     option.add_argument('--no-sandbox')  # 无沙箱
     driver = webdriver.Chrome(options=option, service=Service(driver_path))
