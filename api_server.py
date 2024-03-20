@@ -197,14 +197,15 @@ def getVideo():
     message = 'success'
     data = request.args
     video_type = int(data.get('video_type', 1))
+    print(video_type)
     if not video_type:
         message = 'video_type is a necessary parameter'
     try:
-        if video_type == 1:
+        if video_type is 1:
             d_video_list = db.Redis(0).get_list('danZhuJi')
             print(d_video_list)
             result = json.loads(db.Redis(0).get_values(d_video_list))
-        if video_type == 2:
+        if video_type is 2:
             l_video_list = db.Redis(0).get_list('LaoHuJi')
             result = json.loads(db.Redis(0).get_values(l_video_list))
     except Exception as e:
