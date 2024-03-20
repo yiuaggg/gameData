@@ -27,7 +27,10 @@ class Redis(object):
         :return:
         """
         values = self.redis_obj.mget(keys)
-        return json.loads(values)
+        result = []
+        for value in values:
+            result.append(json.loads(value))
+        return result
     
     def insert_data(self, key, value, ex=None):
         """
