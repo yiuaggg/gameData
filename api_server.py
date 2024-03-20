@@ -202,6 +202,7 @@ def getVideo():
     try:
         if video_type == 1:
             d_video_list = db.Redis(0).get_list('danZhuJi')
+            print(d_video_list)
             result = json.loads(db.Redis(0).get_values(d_video_list))
         if video_type == 2:
             l_video_list = db.Redis(0).get_list('LaoHuJi')

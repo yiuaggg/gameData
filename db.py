@@ -29,6 +29,7 @@ class Redis(object):
         values = self.redis_obj.mget(keys)
         result = []
         for value in values:
+            print(value)
             result.append(json.loads(value))
         return result
     
