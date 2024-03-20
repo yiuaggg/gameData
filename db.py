@@ -109,16 +109,6 @@ class Redis(object):
         """
         return int(self.redis_obj.ttl(key))
 
-    def get_values(self):
-        """
-        获取所有值
-        :return:
-        """
-        values = []
-        for key in self.redis_obj.keys():
-            values.append(self.redis_obj.get(key))
-        return values
-
 
 if __name__ == '__main__':
     print(Redis(9).get_key_ex('f18d1065d30e059e14bf572481423ffb'))

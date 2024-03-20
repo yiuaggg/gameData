@@ -48,7 +48,7 @@ def get_video_url(video_url):
 
 def get_video_list():
     request_url = "https://www.pachitele.com/contents/search?page={}"
-    for page in range(1, 4):
+    for page in range(3, 4):
         request_url = request_url.format(page)
         html_response = requests.get(request_url, headers=headers)
         response = etree.HTML(html_response.text)
