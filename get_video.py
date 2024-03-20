@@ -31,19 +31,23 @@ def get_video_url(video_url):
     driver = webdriver.Chrome(options=option, service=Service(driver_path))
     driver.get(video_url)
     # 登录
-    login_btn = driver.find_element(By.XPATH, '//div[@class="loginBtn"]/a')
-    login_btn.click()
-    username_input = driver.find_element(By.ID, 'loginMail')
-    username_input.send_keys(username)
-    password_input = driver.find_element(By.ID, 'loginPassword')
-    password_input.send_keys(password)
-    time.sleep(1)
-    button = driver.find_element(By.XPATH, '//div[@class="mainBtn mt10"]/button')
-    button.click()
-    time.sleep(4)
-    js = "var videoinfo = videojs('videoPlayer'); return videoinfo.mediainfo.sources[0].src"
-    res = driver.execute_script(js)
-    return res
+    try:
+        login_btn = driver.find_element(By.XPATH, '//div[@class="loginBtn"]/a')
+        if login_btn:
+            login_btn.click()
+        username_input = driver.find_element(By.ID, 'loginMail')
+        username_input.send_keys(username)
+        password_input = driver.find_element(By.ID, 'loginPassword')
+        password_input.send_keys(password)
+        time.sleep(1)
+        button = driver.find_element(By.XPATH, '//div[@class="mainBtn mt10"]/button')
+        button.click()
+        time.sleep(4)
+        js = "var videoinfo = videojs('videoPlayer'); return videoinfo.mediainfo.sources[0].src"
+        res = driver.execute_script(js)
+        return res
+    except Exception as e:
+        print(e)
 
 
 def get_video_list():
