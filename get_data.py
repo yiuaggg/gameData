@@ -79,7 +79,7 @@ def get_game_list(page_number, pageSize, key):
             if machineType == 'Pachinko':
                 roundCost = int(game.get('odds', 0)) * float(game.get('roundAmount')) * 10
                 if len(str(roundCost)) > 10:
-                    roundCost = round(roundCost, 3)
+                    roundCost = round(roundCost, 5)
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
                     'name': game['japaneseName'],  # 游戏名称
