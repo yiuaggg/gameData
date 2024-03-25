@@ -85,8 +85,8 @@ def get_game_list(page_number, pageSize, key):
                     'coverImg': game['gameUrl'],  # 游戏机封面
                     'inRushRate': game['inRushRate'],  # 突入
                     'rushRate': game['rushRate'],  # 继续率
-                    'eachBead': (float(game.get('costRate', 0)) * 10)/(int(game.get('odds'))/2),  # 每珠
-                    'roundCost': int(int(game.get('odds', 0)) * float(game.get('roundAmount')) * 10),  # 每回合扣
+                    'eachBead': (float(game.get('costRate', 0)) * 10)*(int(game.get('odds'))/2),  # 每珠
+                    'roundCost': int(game.get('odds', 0)) * float(game.get('roundAmount')) * 10,  # 每回合扣
                     'residue': int(game.get('totalSeats')) - int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             else:
