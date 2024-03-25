@@ -3,7 +3,7 @@ import requests
 
 
 headers = {
-    "Token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTQyMjUxMywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.x-Cim8ygmFY6u2UWgpgnNAZp351OHHJCH76FtG6zez8"
+    "Token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTQzNTkyNywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.yOunaUbfMz4FDa8YqkORxeCPqRpIFLYC90yGDfpyGK4"
 }
 
 
@@ -75,17 +75,32 @@ def get_game_list(page_number, pageSize, key):
         game_list = json_data.get('items')
         page_info = json_data.get('page')
         for game in game_list:
-            result = {
-                'gameId': game['gameId'],  # 游戏ID
-                'name': game['japaneseName'],  # 游戏名称
-                'machineType': game['machineType'],  # 游戏类型
-                'probability': game['probability'],  # 天井
-                'coverImg': game['gameUrl'],  # 游戏机封面
-                'slotType': game['slotType'],  # 游戏机类型
-                'realAdd': game['realAdd'],  # 纯增
-                'odds': int(game.get('odds', 0))*10,  # 每枚
-                'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
-            }
+            machineType = game['machineType']
+            if machineType == 'Pachinko':
+                result = {
+                    'gameId': game['gameId'],  # 游戏ID
+                    'name': game['japaneseName'],  # 游戏名称
+                    'machineType': machineType,  # 游戏类型
+                    'probability': game['probability'].split('/')[-1],  # 天井数
+                    'coverImg': game['gameUrl'],  # 游戏机封面
+                    'inRushRate': game['inRushRate'],  # 突入
+                    'rushRate': game['rushRate'],  # 继续率
+                    'eachBead': (float(game.get('costRate', 0)) * 10)/(int(game.get('odds'))/2),  # 每珠
+                    'roundCost': int(int(game.get('odds', 0)) * float(game.get('roundAmount')) * 10),  # 每回合扣
+                    'residue': int(game.get('totalSeats')) - int(game.get('surplusSeats'))  # 剩余可用台数
+                }
+            else:
+                result = {
+                    'gameId': game['gameId'],  # 游戏ID
+                    'name': game['japaneseName'],  # 游戏名称
+                    'machineType': machineType,  # 游戏类型
+                    'probability': game['probability'],  # 天井
+                    'coverImg': game['gameUrl'],  # 游戏机封面
+                    'slotType': game['slotType'],  # 游戏机类型
+                    'realAdd': game['realAdd'],  # 纯增
+                    'odds': int(game.get('odds', 0))*10,  # 每枚
+                    'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
+                }
             game_info_list.append(result)
         result_info = {"page": page_info, "rows": game_info_list}
     else:
