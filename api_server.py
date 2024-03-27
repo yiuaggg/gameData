@@ -142,7 +142,7 @@ def searchMachines():
     return jsonify(response)
 
 
-@app.route('/api/searchPlay', methods=['GET'])
+@app.route('/api/searchPlay', methods=['POST'])
 def searchPlay():
     """
     查询正在玩的机器列表
@@ -150,8 +150,10 @@ def searchPlay():
     """
     result = []
     message = 'success'
+    data = request.json
+    user_token = data.get('user_token', '')
     try:
-        result = get_playing_list()
+        result = get_playing_list(user_token)
     except Exception as e:
         print(e)
         message = str(e)
@@ -172,10 +174,13 @@ def removeMachine():
     message = 'success'
     data = request.json
     machine_id = int(data.get('machine_id', 0))
+    user_token = data.get('user_token', '')
     if not machine_id:
         message = 'machine_id is a necessary parameter'
+    if not user_token:
+        message = 'user_token is a necessary parameter'
     try:
-        result = push_stop_machine(machine_id)
+        result = push_stop_machine(machine_id, user_token)
     except Exception as e:
         print(e)
         message = str(e)

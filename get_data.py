@@ -111,11 +111,13 @@ def get_game_list(page_number, pageSize, key):
     return result_info
 
 
-def get_playing_list():
+def get_playing_list(token):
     """
     获取正在玩的机器列表
     :return:
     """
+    if token:
+        headers['Token'] = token
     request_url = "https://api.dasheng66.com/game/searchPlay"
     response = requests.get(request_url, headers=headers)
     try:
@@ -127,12 +129,15 @@ def get_playing_list():
     return result
 
 
-def push_stop_machine(machine_id):
+def push_stop_machine(machine_id, token):
     """
     停止正在玩的机器
     :param machine_id:
+    :param token:
     :return:
     """
+    if token:
+        headers['Token'] = token
     request_url = "https://api.dasheng66.com/game/remove/{}".format(machine_id)
     response = requests.post(request_url, headers=headers)
     try:
