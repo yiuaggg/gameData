@@ -83,7 +83,7 @@ def get_token():
     else:
         username = 'livehouse'
         password = 'livehouse@123'
-        driver_path = r'./chromedriver.exe'
+        driver_path = r'./chromedriver'
         option = webdriver.ChromeOptions()
         option.add_argument('--headless')  # 无头浏览器
         option.add_argument('--disable-gpu')  # 不需要GPU加速
