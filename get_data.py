@@ -27,11 +27,18 @@ def get_game_detail(game_id):
     result_list = []
     if game_info_list:
         for game_info in game_info_list:
+            playUrlList = []
+            machineId = game_info['machineId']
+            base_url = "https://www.dasheng66.com/amigoh5/#/game?machineId={}&bitType={}&token="
+            playUrlList.append(base_url.format(machineId, 'LC'))
+            playUrlList.append(base_url.format(machineId, 'SD'))
+            playUrlList.append(base_url.format(machineId, 'HD'))
             res_info = {
                 "isPlaying": game_info['isPlaying'],  # 是否在使用中
                 "playerId": game_info['playerId'],  # 使用者用户ID
                 "machineName": game_info['machineName'],  # 机器名称
                 "machineId": game_info['machineId'],  # 机器ID
+                "playUrls": playUrlList,  # 游戏页面url
                 "durations": game_info['slotSignalBagDuration']['durations'],  # 柱状图数据组
                 "probability": game_info['slotSignalBagDuration']['probability'],  # 合并确率
                 "tdMaxProfit": game_info['slotSignalBagDuration']['tdMaxProfit'],  # 今日最高
