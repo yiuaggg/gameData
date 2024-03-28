@@ -90,7 +90,7 @@ def get_token():
         option.add_argument('--no-sandbox')  # 无沙箱
         driver = webdriver.Chrome(options=option, service=Service(driver_path))
         driver.get('https://www.gekipachi.com/index')
-        time.sleep(2)
+        time.sleep(4)
         # 登录
         try:
             login_btn = driver.find_element(By.XPATH, '//button[@class="btn lore poke-blue mr-8px"]')
