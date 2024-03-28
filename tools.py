@@ -65,3 +65,12 @@ def decrypt_token(token):
     """ 解析token """
     data = decrypt_aes_gcm(SECRET_KEY, token)
     return eval(data)
+
+
+def get_token():
+    """
+    获取token
+    :return:
+    """
+    token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTY3NjAyMywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.Ali89Lgm4UypmhMHZQQoIBmn-eT2wD0X-ddZDzdsGb4"
+    return token

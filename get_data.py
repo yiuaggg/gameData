@@ -1,9 +1,10 @@
 import math
 import requests
+from tools import get_token
 
 
 headers = {
-    "Token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTU4ODY3MywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.SyM_Di1Cc3jzLl5PDLwo2sp_KSgF1OtGkXbUks18TeY"
+    "Token": get_token()
 }
 
 
