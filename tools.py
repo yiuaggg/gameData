@@ -95,7 +95,7 @@ def get_token():
         try:
             login_btn = driver.find_element(By.XPATH, '//button[@class="btn lore poke-blue mr-8px"]')
             if login_btn:
-                login_btn.click()
+                driver.execute_script("arguments[0].click();", login_btn)
             username_input = driver.find_element(By.XPATH, '//input[@type="text"]')
             username_input.send_keys(username)
             password_input = driver.find_element(By.XPATH, '//input[@type="password"]')
