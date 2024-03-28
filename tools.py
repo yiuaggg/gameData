@@ -121,5 +121,5 @@ def get_token():
 
 
 if __name__ == '__main__':
-    token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTY4MTE2MywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.1TJGwqJofJ6o2quLokUrSJYF_yZvxITFgN2LhHHnodQ"
-    db.Redis(0).insert_data('token', token, 36000)
+    token = get_token()
+    print(token)
