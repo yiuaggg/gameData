@@ -81,8 +81,8 @@ def get_token():
     if old_token:
         return old_token
     else:
-        username = 'yiuaggg'
-        password = '123456QWER'
+        username = 'livehouse'
+        password = 'livehouse@123'
         driver_path = r'./chromedriver.exe'
         option = webdriver.ChromeOptions()
         option.add_argument('--headless')  # 无头浏览器
@@ -121,5 +121,4 @@ def get_token():
 
 
 if __name__ == '__main__':
-    token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTY5MzA3MiwidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.oi_uOxLlm-6_wMxYn5EeobwVZ_7M-oFuJPupUa64gFU"
-    db.Redis(0).insert_data('token', token, ex=36000)
+    get_token()
