@@ -2,7 +2,12 @@ import time
 import string
 import base64
 import random
+
+import db
 from config import SECRET_KEY, API_EXPIRATION
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 
@@ -72,5 +77,49 @@ def get_token():
     获取token
     :return:
     """
-    token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTY3NjAyMywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.Ali89Lgm4UypmhMHZQQoIBmn-eT2wD0X-ddZDzdsGb4"
-    return token
+    old_token = db.Redis(0).get_value('token')
+    if old_token:
+        return old_token
+    else:
+        username = 'yiuaggg'
+        password = '123456QWER'
+        driver_path = r'./chromedriver.exe'
+        option = webdriver.ChromeOptions()
+        option.add_argument('--headless')  # 无头浏览器
+        option.add_argument('--disable-gpu')  # 不需要GPU加速
+        option.add_argument('--no-sandbox')  # 无沙箱
+        driver = webdriver.Chrome(options=option, service=Service(driver_path))
+        driver.get('https://www.gekipachi.com/index')
+        time.sleep(2)
+        # 登录
+        try:
+            login_btn = driver.find_element(By.XPATH, '//button[@class="btn lore poke-blue mr-8px"]')
+            if login_btn:
+                login_btn.click()
+            username_input = driver.find_element(By.XPATH, '//input[@type="text"]')
+            username_input.send_keys(username)
+            password_input = driver.find_element(By.XPATH, '//input[@type="password"]')
+            password_input.send_keys(password)
+            time.sleep(1)
+            button = driver.find_element(By.XPATH, '//div[@class="my-30px"]/button')
+            button.click()
+            time.sleep(2)
+            active_ele = driver.find_element(By.XPATH, '//section[@class="game"]//button[@class="more"]')
+            if active_ele:
+                active_ele.click()
+                time.sleep(3)
+                url = driver.current_url
+                token = url.split('token=')[1].split('%26')[0]
+            else:
+                token = ""
+        except Exception as e:
+            print(e)
+            token = ""
+        if token:
+            db.Redis(0).insert_data('token', token, ex=36000)
+        return token
+
+
+if __name__ == '__main__':
+    token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHRUtJWUlVQUdHRyIsImV4cCI6MTcxMTY4MTE2MywidWlkIjoxMjM5MjEsImVudkdhbWUiOjIsIm5hbWUiOiJHRUtJWUlVQUdHRyIsIm5pY2tuYW1lIjoiR0VLSVlJVUFHR0ciLCJwbGZJZCI6MjIsInR5cCI6ImFtaWdvLWFwcC10eXBlIiwiY3VycmVuY3kiOiJKUFkiLCJyaWQiOjIwNiwiYXVzIjpbIlJPTEVfQVVUSEVEIiwiUk9MRV9HQU1FX1BMQVlFUiJdfQ.1TJGwqJofJ6o2quLokUrSJYF_yZvxITFgN2LhHHnodQ"
+    db.Redis(0).insert_data('token', token, 36000)
