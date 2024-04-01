@@ -91,6 +91,7 @@ def get_game_list(page_number, pageSize, key):
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
                     'name': game['japaneseName'],  # 游戏名称
+                    'joinJackpot': game['joinJackpot'],  # 是否参与赏金活动
                     'machineType': machineType,  # 游戏类型
                     'probability': game['probability'].split('/')[-1],  # 天井数
                     'coverImg': game['gameUrl'],  # 游戏机封面
@@ -104,6 +105,7 @@ def get_game_list(page_number, pageSize, key):
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
                     'name': game['japaneseName'],  # 游戏名称
+                    'joinJackpot': game['joinJackpot'],  # 是否参与赏金活动
                     'machineType': machineType,  # 游戏类型
                     'probability': game['probability'],  # 天井
                     'coverImg': game['gameUrl'],  # 游戏机封面

@@ -84,7 +84,7 @@ def getMenuTypes():
     response = {
         "data": ['Hot','New', 'slot_N0.4_false', 'slot_N0.5_false', 'slot_N0.6_false', 'slot_TAIWANver_false',
                  'slot_true', 'cr_Pachinko_CLOSE_', 'cr_Pachinko_MAX_', 'cr_Pachinko_MID_', 'cr_Pachinko_LM_',
-                 'cr_Pachinko_L_', 'oneslot,onepachinko'],
+                 'cr_Pachinko_L_', 'oneslot', 'onepachinko'],
         "message": 'success'
     }
     return jsonify(response)
