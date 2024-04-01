@@ -1,3 +1,4 @@
+import datetime
 import time
 import string
 import base64
@@ -121,4 +122,6 @@ def get_token():
 
 
 if __name__ == '__main__':
-    get_token()
+    print(datetime.date.today())
+    res = get_token()
+    print(res)
