@@ -97,6 +97,7 @@ def get_game_list(page_number, pageSize, key):
                     'rushRate': game['rushRate'],  # 继续率
                     'costRate': game.get('costRate', 0),  # 每回合扣
                     'odds': game.get('odds', 0),  # 每珠
+                    'roundAmount': game.get('roundAmount', 0),
                     'residue': int(game.get('totalSeats')) - int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             else:
@@ -111,6 +112,7 @@ def get_game_list(page_number, pageSize, key):
                     'slotType': game['slotType'],  # 游戏机类型
                     'realAdd': game['realAdd'],  # 纯增
                     'odds': game.get('odds', 0),  # 每枚
+                    'costRate': game.get('costRate', 0),
                     'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             game_info_list.append(result)
