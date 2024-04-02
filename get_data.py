@@ -85,9 +85,6 @@ def get_game_list(page_number, pageSize, key):
         for game in game_list:
             machineType = game['machineType']
             if machineType == 'Pachinko':
-                roundCost = int(game.get('odds', 0)) * float(game.get('roundAmount')) * 10
-                if len(str(roundCost)) > 10:
-                    roundCost = float(str(roundCost)[:6])
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
                     'gameType': game['gameType'],  # 游戏类型
@@ -98,8 +95,8 @@ def get_game_list(page_number, pageSize, key):
                     'coverImg': game['gameUrl'],  # 游戏机封面
                     'inRushRate': game['inRushRate'],  # 突入
                     'rushRate': game['rushRate'],  # 继续率
-                    'eachBead': (float(game.get('costRate', 0)) * 10)*(int(game.get('odds'))/2),  # 每珠
-                    'roundCost': roundCost,  # 每回合扣
+                    'costRate': game.get('costRate', 0),  # 每回合扣
+                    'odds': game.get('odds', 0),  # 每珠
                     'residue': int(game.get('totalSeats')) - int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             else:
@@ -113,7 +110,7 @@ def get_game_list(page_number, pageSize, key):
                     'coverImg': game['gameUrl'],  # 游戏机封面
                     'slotType': game['slotType'],  # 游戏机类型
                     'realAdd': game['realAdd'],  # 纯增
-                    'odds': game.get('odds', 0)*10,  # 每枚
+                    'odds': game.get('odds', 0),  # 每枚
                     'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             game_info_list.append(result)
