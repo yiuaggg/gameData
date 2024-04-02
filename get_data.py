@@ -90,6 +90,7 @@ def get_game_list(page_number, pageSize, key):
                     roundCost = float(str(roundCost)[:6])
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
+                    'gameType': game['gameType'],  # 游戏类型
                     'name': game['japaneseName'],  # 游戏名称
                     'joinJackpot': game['joinJackpot'],  # 是否参与赏金活动
                     'machineType': machineType,  # 游戏类型
@@ -104,6 +105,7 @@ def get_game_list(page_number, pageSize, key):
             else:
                 result = {
                     'gameId': game['gameId'],  # 游戏ID
+                    'gameType': game['gameType'],  # 游戏类型
                     'name': game['japaneseName'],  # 游戏名称
                     'joinJackpot': game['joinJackpot'],  # 是否参与赏金活动
                     'machineType': machineType,  # 游戏类型
@@ -111,7 +113,7 @@ def get_game_list(page_number, pageSize, key):
                     'coverImg': game['gameUrl'],  # 游戏机封面
                     'slotType': game['slotType'],  # 游戏机类型
                     'realAdd': game['realAdd'],  # 纯增
-                    'odds': int(game.get('odds', 0))*10,  # 每枚
+                    'odds': game.get('odds', 0)*10,  # 每枚
                     'residue': int(game.get('totalSeats'))-int(game.get('surplusSeats'))  # 剩余可用台数
                 }
             game_info_list.append(result)

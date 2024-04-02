@@ -122,6 +122,6 @@ def get_token():
 
 
 if __name__ == '__main__':
-    print(datetime.date.today())
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     res = get_token()
     print(res)
