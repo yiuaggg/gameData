@@ -39,8 +39,10 @@ def get_game_detail(game_id):
                 "playerId": game_info['playerId'],  # 使用者用户ID
                 "machineName": game_info['machineName'],  # 机器名称
                 "machineId": game_info['machineId'],  # 机器ID
+                "countdowns": game_info['countdowns'], 
                 "playUrls": playUrlList,  # 游戏页面url
                 "durations": game_info['slotSignalBagDuration']['durations'],  # 柱状图数据组
+                "probability": game_info['slotSignalBagDuration']['probability'], 
                 "probability": game_info['slotSignalBagDuration']['probability'],  # 合并确率
                 "tdMaxProfit": game_info['slotSignalBagDuration']['tdMaxProfit'],  # 今日最高
                 "agoMaxProfit": game_info['slotSignalBagDuration']['agoMaxProfit'],  # 历史最高
